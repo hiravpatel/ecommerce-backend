@@ -1,0 +1,31 @@
+export const RESPONSE_MESSAGES = {
+  COMMON: {
+    SUCCESS: 'Request completed successfully',
+    INTERNAL_SERVER_ERROR: 'Internal server error',
+    VALIDATION_FAILED: 'Validation failed',
+    UNAUTHORIZED: 'Unauthorized',
+    FORBIDDEN: 'Forbidden',
+    NOT_FOUND: 'Resource not found',
+    BAD_REQUEST: 'Bad request',
+  },
+  AUTH: {
+    REGISTER_SUCCESS: 'Account registered successfully',
+    LOGIN_SUCCESS: 'Login successful',
+    REFRESH_SUCCESS: 'Token refreshed successfully',
+    LOGOUT_SUCCESS: 'Logged out successfully',
+    FORGOT_PASSWORD_SUCCESS:
+      'If an account exists with that email, a password reset link has been generated.',
+    RESET_PASSWORD_SUCCESS: 'Password reset successful. Please login again.',
+    CURRENT_USER_FETCHED: 'Current user fetched successfully',
+    ADMIN_SEED_REQUIRED: 'Admin users must be created using the admin seeder',
+    USER_ALREADY_EXISTS: 'User already exists with provided email or phone',
+    EMAIL_ALREADY_EXISTS: 'User already exists with provided email',
+    PHONE_ALREADY_EXISTS: 'User already exists with provided phone',
+    BUSINESS_SLUG_ALREADY_EXISTS: 'Vendor already exists with provided business slug',
+    INVALID_CREDENTIALS: 'Invalid credentials',
+    REFRESH_TOKEN_INVALID: 'Refresh token expired or invalid',
+    ACCOUNT_NOT_FOUND: 'Account not found or inactive',
+    RESET_TOKEN_FORMAT_INVALID: 'Invalid reset token format',
+    RESET_TOKEN_INVALID: 'Reset token expired or invalid',
+  },
+} as const;

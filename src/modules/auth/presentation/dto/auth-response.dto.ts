@@ -2,10 +2,16 @@ import { ApiProperty } from '@nestjs/swagger';
 import { AuthUserDto } from './auth-user.dto';
 
 export class AuthResponseDto {
-  @ApiProperty()
+  @ApiProperty({
+    example:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.access-token-signature',
+  })
   accessToken!: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    example:
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.refresh-token-signature',
+  })
   refreshToken!: string;
 
   @ApiProperty({ type: AuthUserDto })

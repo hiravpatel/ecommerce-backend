@@ -1,11 +1,10 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MongoRepository } from 'typeorm';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { User } from 'src/modules/users/data/entities/user.entity';
 import { objectIdToString } from 'src/common/database/object-id.util';
+import { RESPONSE_MESSAGES } from 'src/common/constants/response-messages.constant';
+import { UserRepository } from 'src/modules/users/data/repositories/user.repository';
 
 type JwtPayload = {
   sub: string;
@@ -17,8 +16,7 @@ type JwtPayload = {
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     configService: ConfigService,
-    @InjectRepository(User)
-    private readonly usersRepository: MongoRepository<User>,
+    private readonly userRepository: UserRepository,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -28,13 +26,10 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: JwtPayload) {
-    const user = await this.usersRepository.findOneBy({
-      uuid: payload.sub,
-      isActive: true,
-    });
+    const user = await this.userRepository.findActiveByUuid(payload.sub);
 
     if (!user) {
-      throw new UnauthorizedException('Account not found or inactive');
+      throw new UnauthorizedException(RESPONSE_MESSAGES.AUTH.ACCOUNT_NOT_FOUND);
     }
 
     return {

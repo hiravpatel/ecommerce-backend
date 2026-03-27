@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import appConfig from './config/app.config';
 import databaseConfig from './config/database.config';
 import jwtConfig from './config/jwt.config';
+import securityConfig from './config/security.config';
 import validateEnv from './config/env.validation';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
@@ -15,7 +16,7 @@ import { AuthModule } from './modules/auth/auth.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, databaseConfig, jwtConfig],
+      load: [appConfig, databaseConfig, jwtConfig, securityConfig],
       validate: validateEnv,
       envFilePath: ['.env'],
     }),

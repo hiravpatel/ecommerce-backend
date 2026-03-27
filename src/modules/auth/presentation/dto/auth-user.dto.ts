@@ -2,36 +2,41 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole } from 'src/modules/users/data/entities/user.entity';
 
 export class AuthUserDto {
-  @ApiProperty()
+  @ApiProperty({ example: '67e4f0f78a6ef35a3b4f2e11' })
   id!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   uuid!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'john@example.com' })
   email!: string;
 
-  @ApiPropertyOptional({ nullable: true })
+  @ApiPropertyOptional({ nullable: true, example: '+919876543210' })
   phone!: string | null;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'John' })
   firstName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Doe' })
   lastName!: string;
 
-  @ApiProperty({ enum: UserRole })
+  @ApiProperty({ enum: UserRole, example: UserRole.CUSTOMER })
   role!: UserRole;
 
-  @ApiProperty()
+  @ApiProperty({ example: true })
   isActive!: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ example: false })
   isEmailVerified!: boolean;
 
-  @ApiProperty()
+  @ApiProperty({ example: false })
   isPhoneVerified!: boolean;
 
-  @ApiPropertyOptional({ nullable: true, type: String, format: 'date-time' })
+  @ApiPropertyOptional({
+    nullable: true,
+    type: String,
+    format: 'date-time',
+    example: '2026-03-27T09:30:00.000Z',
+  })
   lastLoginAt!: string | null;
 }

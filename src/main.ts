@@ -1,8 +1,11 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import { RESPONSE_MESSAGES } from './common/constants/response-messages.constant';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { ResponseTransformInterceptor } from './common/interceptors/response-transform.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,8 +18,16 @@ async function bootstrap() {
       whitelist: true,
       transform: true,
       forbidNonWhitelisted: true,
+      exceptionFactory: (errors) =>
+        new BadRequestException({
+          message: RESPONSE_MESSAGES.COMMON.VALIDATION_FAILED,
+          error: 'Bad Request',
+          details: errors.flatMap((error) => Object.values(error.constraints ?? {})),
+        }),
     }),
   );
+  app.useGlobalInterceptors(new ResponseTransformInterceptor(app.get(Reflector)));
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   app.enableCors({
     origin: true,

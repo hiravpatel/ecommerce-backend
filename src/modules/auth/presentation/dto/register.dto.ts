@@ -10,41 +10,46 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { UserRole } from 'src/modules/users/data/entities/user.entity';
 
 export class RegisterDto {
-  @ApiProperty()
+  @ApiProperty({ example: 'vendor@example.com' })
   @IsEmail()
   email!: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ example: '+919876543210' })
   @IsOptional()
   @IsString()
   phone?: string;
 
-  @ApiProperty({ minLength: 8 })
+  @ApiProperty({ minLength: 8, example: 'StrongPass@123' })
   @IsString()
   @MinLength(8)
   password!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'John' })
   @IsString()
   firstName!: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 'Doe' })
   @IsString()
   lastName!: string;
 
-  @ApiPropertyOptional({ enum: UserRole, default: UserRole.CUSTOMER })
+  @ApiPropertyOptional({
+    enum: UserRole,
+    default: UserRole.CUSTOMER,
+    example: UserRole.VENDOR,
+  })
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
 
   @ApiPropertyOptional({
     description: 'Required when role is vendor',
+    example: 'John Electronics Store',
   })
   @ValidateIf((dto: RegisterDto) => dto.role === UserRole.VENDOR)
   @IsString()
   businessName?: string;
 
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ example: 'john-electronics-store' })
   @IsOptional()
   @IsString()
   businessSlug?: string;
