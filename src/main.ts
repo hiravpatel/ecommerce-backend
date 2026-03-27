@@ -2,6 +2,8 @@ import { BadRequestException, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as express from 'express';
+import { join } from 'path';
 import { AppModule } from './app.module';
 import { RESPONSE_MESSAGES } from './common/constants/response-messages.constant';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
@@ -33,6 +35,7 @@ async function bootstrap() {
     origin: true,
     credentials: true,
   });
+  app.use('/uploads', express.static(join(process.cwd(), 'uploads')));
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('ECommerce API')

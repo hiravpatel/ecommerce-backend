@@ -5,6 +5,7 @@ import { FindOptionsWhere, MongoRepository } from 'typeorm';
 import { BaseMongoRepository } from 'src/common/database/base-mongo.repository';
 import { decryptField, encryptField } from 'src/common/utils/field-encryption.util';
 import { VendorBankAccount } from '../entities/vendor.entity';
+import { ObjectId } from 'mongodb';
 
 type VendorBankAccountWithPlainAccountNumber = VendorBankAccount & {
   accountNumber?: string;
@@ -42,6 +43,11 @@ export class VendorBankAccountRepository extends BaseMongoRepository<VendorBankA
     }
 
     return this.decryptAccountNumber(entity);
+  }
+
+  async findDecryptedByVendorId(vendorId: ObjectId) {
+    const entities = await this.findBy({ vendorId });
+    return entities.map((entity) => this.decryptAccountNumber(entity));
   }
 
   private decryptAccountNumber(entity: VendorBankAccount) {
