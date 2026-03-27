@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { ObjectId } from 'mongodb';
 import { MongoRepository } from 'typeorm';
 import { BaseMongoRepository } from 'src/common/database/base-mongo.repository';
 import { Vendor } from '../entities/vendor.entity';
@@ -15,5 +16,9 @@ export class VendorRepository extends BaseMongoRepository<Vendor> {
 
   findByBusinessSlug(businessSlug: string) {
     return this.findOneBy({ businessSlug });
+  }
+
+  findByUserId(userId: ObjectId) {
+    return this.findOneBy({ userId });
   }
 }

@@ -28,4 +28,17 @@ export const RESPONSE_MESSAGES = {
     RESET_TOKEN_FORMAT_INVALID: 'Invalid reset token format',
     RESET_TOKEN_INVALID: 'Reset token expired or invalid',
   },
+  VENDOR: {
+    PROFILE_FETCHED: 'Vendor profile fetched successfully',
+    PROFILE_UPDATED: 'Vendor profile updated successfully',
+    BANK_ACCOUNTS_FETCHED: 'Vendor bank accounts fetched successfully',
+    BANK_ACCOUNT_CREATED: 'Vendor bank account created successfully',
+    BANK_ACCOUNT_UPDATED: 'Vendor bank account updated successfully',
+    KYC_DOCUMENTS_FETCHED: 'Vendor KYC documents fetched successfully',
+    KYC_DOCUMENT_CREATED: 'Vendor KYC document created successfully',
+    PROFILE_NOT_FOUND: 'Vendor profile not found',
+    BANK_ACCOUNT_NOT_FOUND: 'Vendor bank account not found',
+    BUSINESS_SLUG_ALREADY_EXISTS: 'Vendor already exists with provided business slug',
+    GSTIN_ALREADY_EXISTS: 'Vendor already exists with provided GSTIN',
+  },
 } as const;
