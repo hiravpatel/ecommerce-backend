@@ -41,4 +41,15 @@ export const RESPONSE_MESSAGES = {
     BUSINESS_SLUG_ALREADY_EXISTS: 'Vendor already exists with provided business slug',
     GSTIN_ALREADY_EXISTS: 'Vendor already exists with provided GSTIN',
   },
+  PRODUCT: {
+    CREATED: 'Product created successfully',
+    UPDATED: 'Product updated successfully',
+    LIST_FETCHED: 'Products fetched successfully',
+    DETAILS_FETCHED: 'Product fetched successfully',
+    NOT_FOUND: 'Product not found',
+    CATEGORY_NOT_FOUND: 'Category not found',
+    INVALID_STATUS: 'Only draft or pending approval status is allowed for vendor product submission',
+    DUPLICATE_SLUG: 'Product already exists with provided slug',
+    DUPLICATE_SKU: 'Product variant already exists with provided SKU',
+  },
 } as const;
