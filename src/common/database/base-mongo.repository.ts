@@ -21,6 +21,10 @@ export abstract class BaseMongoRepository<TEntity extends { _id?: ObjectId }> {
     return this.repository.findBy(where);
   }
 
+  deleteManyBy(where: FindOptionsWhere<TEntity>) {
+    return this.repository.deleteMany(where);
+  }
+
   deleteById(id: ObjectId) {
     return this.repository.deleteOne({ _id: id } as FindOptionsWhere<TEntity>);
   }
