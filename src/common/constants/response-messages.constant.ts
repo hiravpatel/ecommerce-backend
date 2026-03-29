@@ -31,6 +31,8 @@ export const RESPONSE_MESSAGES = {
   VENDOR: {
     PROFILE_FETCHED: 'Vendor profile fetched successfully',
     PROFILE_UPDATED: 'Vendor profile updated successfully',
+    LIST_FETCHED: 'Vendors fetched successfully',
+    STATUS_UPDATED: 'Vendor status updated successfully',
     BANK_ACCOUNTS_FETCHED: 'Vendor bank accounts fetched successfully',
     BANK_ACCOUNT_CREATED: 'Vendor bank account created successfully',
     BANK_ACCOUNT_UPDATED: 'Vendor bank account updated successfully',
@@ -40,6 +42,7 @@ export const RESPONSE_MESSAGES = {
     BANK_ACCOUNT_NOT_FOUND: 'Vendor bank account not found',
     BUSINESS_SLUG_ALREADY_EXISTS: 'Vendor already exists with provided business slug',
     GSTIN_ALREADY_EXISTS: 'Vendor already exists with provided GSTIN',
+    APPROVAL_REQUIRED: 'Vendor approval is required before managing products',
   },
   PRODUCT: {
     CREATED: 'Product created successfully',
@@ -51,5 +54,21 @@ export const RESPONSE_MESSAGES = {
     INVALID_STATUS: 'Only draft or pending approval status is allowed for vendor product submission',
     DUPLICATE_SLUG: 'Product already exists with provided slug',
     DUPLICATE_SKU: 'Product variant already exists with provided SKU',
+  },
+  CATEGORY: {
+    LIST_FETCHED: 'Categories fetched successfully',
+    TREE_FETCHED: 'Category tree fetched successfully',
+    DETAILS_FETCHED: 'Category fetched successfully',
+    CREATED: 'Category created successfully',
+    UPDATED: 'Category updated successfully',
+    ATTRIBUTES_FETCHED: 'Category attributes fetched successfully',
+    ATTRIBUTE_CREATED: 'Category attribute created successfully',
+    ATTRIBUTE_UPDATED: 'Category attribute updated successfully',
+    ATTRIBUTE_VALUES_CREATED: 'Attribute values created successfully',
+    NOT_FOUND: 'Category not found',
+    ATTRIBUTE_NOT_FOUND: 'Category attribute not found',
+    DUPLICATE_SLUG: 'Category already exists with provided slug',
+    DUPLICATE_ATTRIBUTE_SLUG: 'Category attribute already exists with provided slug',
+    INVALID_PARENT: 'Invalid parent category selected',
   },
 } as const;

@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -19,11 +20,14 @@ import {
   VendorKycDocument,
   VendorKycDocumentStatus,
   VendorKycStatus,
+  VendorStatus,
 } from '../../data/entities/vendor.entity';
 import { CreateVendorBankAccountDto } from '../../presentation/dto/create-vendor-bank-account.dto';
 import { CreateVendorKycDocumentDto } from '../../presentation/dto/create-vendor-kyc-document.dto';
 import { UpdateVendorBankAccountDto } from '../../presentation/dto/update-vendor-bank-account.dto';
 import { UpdateVendorProfileDto } from '../../presentation/dto/update-vendor-profile.dto';
+import { UpdateVendorStatusDto } from '../../presentation/dto/update-vendor-status.dto';
+import { VendorListQueryDto } from '../../presentation/dto/vendor-list-query.dto';
 
 @Injectable()
 export class VendorsService {
@@ -37,6 +41,60 @@ export class VendorsService {
   async getMyProfile(userUuid: string) {
     const { vendor } = await this.getVendorContext(userUuid);
     return this.serializeVendor(vendor);
+  }
+
+  async listVendors(query: VendorListQueryDto) {
+    const vendors = await this.vendorRepository.findBy({} as never);
+    const search = query.search?.trim().toLowerCase();
+
+    return vendors
+      .filter((vendor) => {
+        if (query.status && vendor.status !== query.status) {
+          return false;
+        }
+
+        if (!search) {
+          return true;
+        }
+
+        const searchableValues = [
+          vendor.businessName,
+          vendor.businessSlug,
+          vendor.gstin ?? '',
+          vendor.panNumber ?? '',
+        ];
+
+        return searchableValues.some((value) => value.toLowerCase().includes(search));
+      })
+      .map((vendor) => this.serializeVendor(vendor));
+  }
+
+  async getVendorById(vendorId: string) {
+    const vendor = await this.getVendorEntityById(vendorId);
+    return this.serializeVendor(vendor);
+  }
+
+  async updateVendorStatus(vendorId: string, dto: UpdateVendorStatusDto) {
+    const vendor = await this.getVendorEntityById(vendorId);
+
+    vendor.status = dto.status;
+
+    if (dto.status === VendorStatus.APPROVED && vendor.kycStatus === VendorKycStatus.SUBMITTED) {
+      vendor.kycStatus = VendorKycStatus.VERIFIED;
+    }
+
+    await this.vendorRepository.save(vendor);
+    return this.serializeVendor(vendor);
+  }
+
+  async getApprovedVendorByUserUuid(userUuid: string) {
+    const { vendor } = await this.getVendorContext(userUuid);
+
+    if (vendor.status !== VendorStatus.APPROVED) {
+      throw new ForbiddenException(RESPONSE_MESSAGES.VENDOR.APPROVAL_REQUIRED);
+    }
+
+    return vendor;
   }
 
   async updateMyProfile(userUuid: string, dto: UpdateVendorProfileDto) {
@@ -249,6 +307,18 @@ export class VendorsService {
     }
 
     return { user, vendor };
+  }
+
+  private async getVendorEntityById(vendorId: string) {
+    const vendor = await this.vendorRepository.findOneBy({
+      _id: toObjectId(vendorId)!,
+    });
+
+    if (!vendor) {
+      throw new NotFoundException(RESPONSE_MESSAGES.VENDOR.PROFILE_NOT_FOUND);
+    }
+
+    return vendor;
   }
 
   private async ensureUniqueGstin(gstin: string, currentVendorId: ObjectId) {
