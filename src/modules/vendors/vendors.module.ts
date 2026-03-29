@@ -11,11 +11,12 @@ import { VendorBankAccountRepository } from './data/repositories/vendor-bank-acc
 import { VendorKycDocumentRepository } from './data/repositories/vendor-kyc-document.repository';
 import { VendorRepository } from './data/repositories/vendor.repository';
 import { VendorsService } from './infrastructure/services/vendors.service';
+import { AdminVendorsController } from './presentation/controllers/admin-vendors.controller';
 import { VendorsController } from './presentation/controllers/vendors.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([User, Vendor, VendorBankAccount, VendorKycDocument])],
-  controllers: [VendorsController],
+  controllers: [VendorsController, AdminVendorsController],
   providers: [
     VendorsService,
     UserRepository,

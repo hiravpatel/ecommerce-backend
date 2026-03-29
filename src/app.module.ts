@@ -11,6 +11,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 import { appEntities } from './database/entities';
 import { AuthModule } from './modules/auth/auth.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { VendorsModule } from './modules/vendors/vendors.module';
 
@@ -34,6 +35,7 @@ import { VendorsModule } from './modules/vendors/vendors.module';
       }),
     }),
     AuthModule,
+    CategoriesModule,
     VendorsModule,
     ProductsModule,
   ],

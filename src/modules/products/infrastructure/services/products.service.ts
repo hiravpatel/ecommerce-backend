@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   ConflictException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -25,6 +26,8 @@ import {
 import { CreateProductDto } from '../../presentation/dto/create-product.dto';
 import { ProductListQueryDto } from '../../presentation/dto/product-list-query.dto';
 import { UpdateProductDto } from '../../presentation/dto/update-product.dto';
+
+import { VendorStatus } from 'src/modules/vendors/data/entities/vendor.entity';
 
 @Injectable()
 export class ProductsService {
@@ -89,7 +92,7 @@ export class ProductsService {
   }
 
   async createProduct(userUuid: string, dto: CreateProductDto) {
-    const vendor = await this.getVendorByUserUuid(userUuid);
+    const vendor = await this.getApprovedVendorByUserUuid(userUuid);
     const category = await this.categoryRepository.findOneBy({
       _id: toObjectId(dto.categoryId)!,
       isActive: true,
@@ -135,7 +138,7 @@ export class ProductsService {
   }
 
   async updateProduct(userUuid: string, productId: string, dto: UpdateProductDto) {
-    const vendor = await this.getVendorByUserUuid(userUuid);
+    const vendor = await this.getApprovedVendorByUserUuid(userUuid);
     const product = await this.getOwnedProduct(vendor._id, productId);
 
     if (dto.categoryId !== undefined) {
@@ -219,6 +222,16 @@ export class ProductsService {
 
     if (!vendor) {
       throw new NotFoundException(RESPONSE_MESSAGES.VENDOR.PROFILE_NOT_FOUND);
+    }
+
+    return vendor;
+  }
+
+  private async getApprovedVendorByUserUuid(userUuid: string) {
+    const vendor = await this.getVendorByUserUuid(userUuid);
+
+    if (vendor.status !== VendorStatus.APPROVED) {
+      throw new ForbiddenException(RESPONSE_MESSAGES.VENDOR.APPROVAL_REQUIRED);
     }
 
     return vendor;
